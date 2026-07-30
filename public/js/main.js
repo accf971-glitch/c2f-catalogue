@@ -124,6 +124,7 @@ function renderGrid(formations) {
       <span class="category-tag">${escapeHtml(f.category_name)}</span>
       <h3>${escapeHtml(f.title)}</h3>
       <p class="summary">${escapeHtml(f.summary || "")}</p>
+      <p class="price">${formatPrice(f.prix_ht)}</p>
       <div class="badge-row">
         <span class="badge">${FORMAT_LABELS[f.format] || f.format}</span>
         <span class="badge">${duration}</span>
@@ -141,6 +142,12 @@ function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str;
   return div.innerHTML;
+}
+
+function formatPrice(prixHt) {
+  return prixHt != null
+    ? `${new Intl.NumberFormat("fr-FR").format(prixHt)} € HT`
+    : "Sur devis";
 }
 
 searchInput.addEventListener("input", (e) => {

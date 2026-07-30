@@ -59,8 +59,16 @@ version pour éviter d'éditer le code directement.
 | GET     | `/api/categories`       | Liste des catégories                                       |
 | GET     | `/api/formations`       | Liste des formations, filtrable via query params : `category`, `format`, `certifiante` (0/1), `cpf` (0/1), `lieu`, `q` (recherche texte) |
 | GET     | `/api/formations/:id`   | Détail d'une formation (par id ou par slug)                |
-| POST    | `/api/contact`          | Enregistre une demande d'information (`formation_id`, `nom`, `email`, `telephone`, `message`) et déclenche l'envoi d'email |
+| POST    | `/api/contact`          | Enregistre une demande d'information ou de devis selon `type` (`info` par défaut ou `devis`) : `formation_id`, `nom`, `email`, `telephone`, `societe`, `participants`, `message`. Déclenche l'envoi d'un email adapté (devis avec calcul du montant HT si le prix de la formation est connu) |
 | POST    | `/api/formations/:id/avis` | Enregistre un avis (`note` de 1 à 5, `commentaire` optionnel) ; le taux de satisfaction affiché sur chaque formation est calculé automatiquement à partir de la moyenne des avis reçus (`note` moyenne × 20, arrondi) |
+
+## Prix des formations
+
+Le champ `prix_ht` (dans `server/seed.js`) est le prix HT en euros. **Seul le prix de
+"Bilan de Compétences - Réalisation" (1 200 € HT) est confirmé** (source : catalogue
+catalogueformpro.com d'origine). Les 9 autres formations ont `prix_ht: null`, ce qui affiche
+"Sur devis" sur le site plutôt qu'un chiffre inventé. Pour ajouter un vrai prix à une formation,
+éditer sa valeur `prix_ht` dans `server/seed.js` puis relancer `npm run seed`.
 
 ## Configuration email
 

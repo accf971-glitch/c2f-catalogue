@@ -24,6 +24,14 @@ const avisStatus = document.getElementById("avisStatus");
 const avisFormationTitle = document.getElementById("avisFormationTitle");
 const starRating = document.getElementById("starRating");
 
+const devisModal = document.getElementById("devisModal");
+const closeDevisModalBtn = document.getElementById("closeDevisModal");
+const devisForm = document.getElementById("devisForm");
+const devisStatus = document.getElementById("devisStatus");
+const devisFormationTitle = document.getElementById("devisFormationTitle");
+const devisParticipantsInput = document.getElementById("devisParticipants");
+const devisEstimation = document.getElementById("devisEstimation");
+
 let currentFormation = null;
 let selectedNote = 0;
 
@@ -31,6 +39,14 @@ function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str || "";
   return div.innerHTML;
+}
+
+function formatEuros(amount) {
+  return new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(amount);
+}
+
+function formatPrice(prixHt) {
+  return prixHt != null ? `${formatEuros(prixHt)} HT` : "Sur devis";
 }
 
 async function loadFormation() {
@@ -78,6 +94,7 @@ function render(f) {
     </div>
 
     <aside class="sidebar-card">
+      <div class="info-row price"><span>Prix</span><span>${formatPrice(f.prix_ht)}</span></div>
       <div class="info-row"><span>Format</span><span>${FORMAT_LABELS[f.format] || f.format}</span></div>
       <div class="info-row"><span>Durée</span><span>${duration}</span></div>
       <div class="info-row"><span>Lieu</span><span>${escapeHtml(f.lieu || "-")}</span></div>
@@ -92,12 +109,14 @@ function render(f) {
         }</span>
       </div>
       <button class="cta-button" id="openContact">Demander des informations</button>
+      <button class="review-button" id="openDevis">Demander un devis</button>
       <button class="review-button" id="openAvis">Donner mon avis</button>
     </aside>
   `;
 
   document.getElementById("openContact").addEventListener("click", openModal);
   document.getElementById("openAvis").addEventListener("click", openAvisModal);
+  document.getElementById("openDevis").addEventListener("click", openDevisModal);
 }
 
 function section(title, content) {
@@ -274,6 +293,72 @@ avisForm.addEventListener("submit", async (e) => {
     console.error(err);
     avisStatus.textContent = "Une erreur est survenue. Merci de réessayer.";
     avisStatus.className = "form-status error";
+  }
+});
+
+function openDevisModal() {
+  devisFormationTitle.textContent = currentFormation ? currentFormation.title : "";
+  devisStatus.textContent = "";
+  devisStatus.className = "form-status";
+  devisForm.reset();
+  updateDevisEstimation();
+  devisModal.classList.remove("hidden");
+}
+
+function closeDevisModal() {
+  devisModal.classList.add("hidden");
+}
+
+function updateDevisEstimation() {
+  const prixHt = currentFormation ? currentFormation.prix_ht : null;
+  const participants = Math.max(1, Number(devisParticipantsInput.value) || 1);
+
+  devisEstimation.textContent =
+    prixHt != null
+      ? `Estimation : ${formatEuros(prixHt * participants)} HT (${participants} participant${participants > 1 ? "s" : ""} × ${formatEuros(prixHt)})`
+      : "Cette formation est proposée sur devis : nous vous enverrons un chiffrage personnalisé.";
+}
+
+devisParticipantsInput.addEventListener("input", updateDevisEstimation);
+
+closeDevisModalBtn.addEventListener("click", closeDevisModal);
+devisModal.addEventListener("click", (e) => {
+  if (e.target === devisModal) closeDevisModal();
+});
+
+devisForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const payload = {
+    type: "devis",
+    formation_id: currentFormation ? currentFormation.id : null,
+    nom: document.getElementById("devisNom").value.trim(),
+    email: document.getElementById("devisEmail").value.trim(),
+    telephone: document.getElementById("devisTelephone").value.trim(),
+    societe: document.getElementById("devisSociete").value.trim(),
+    participants: Math.max(1, Number(devisParticipantsInput.value) || 1),
+    message: document.getElementById("devisMessage").value.trim()
+  };
+
+  devisStatus.textContent = "Envoi en cours...";
+  devisStatus.className = "form-status";
+
+  try {
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) throw new Error("Erreur lors de l'envoi");
+
+    devisStatus.textContent = "Votre demande de devis a bien été envoyée. Nous vous recontacterons rapidement.";
+    devisStatus.className = "form-status success";
+    devisForm.reset();
+  } catch (err) {
+    console.error(err);
+    devisStatus.textContent = "Une erreur est survenue. Merci de réessayer ou de nous contacter directement.";
+    devisStatus.className = "form-status error";
   }
 });
 

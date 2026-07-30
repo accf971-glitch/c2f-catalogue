@@ -36,15 +36,19 @@ db.exec(`
     programme       TEXT,
     summary         TEXT,
     image_emoji     TEXT DEFAULT '📘',
+    prix_ht         REAL,
     created_at      TEXT NOT NULL DEFAULT (datetime('now'))
   );
 
   CREATE TABLE IF NOT EXISTS contacts (
     id           INTEGER PRIMARY KEY AUTOINCREMENT,
     formation_id INTEGER REFERENCES formations(id) ON DELETE SET NULL,
+    type         TEXT NOT NULL DEFAULT 'info' CHECK (type IN ('info', 'devis')),
     nom          TEXT NOT NULL,
     email        TEXT NOT NULL,
     telephone    TEXT,
+    societe      TEXT,
+    participants INTEGER,
     message      TEXT,
     created_at   TEXT NOT NULL DEFAULT (datetime('now'))
   );

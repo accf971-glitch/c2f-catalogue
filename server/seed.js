@@ -49,6 +49,7 @@ const formations = [
     ]),
     summary: "L'accompagnement de référence pour faire le point sur votre parcours et construire un projet professionnel solide.",
     image_emoji: "🧭",
+    prix_ht: null,
   },
   {
     category: "bilan-de-competences",
@@ -110,6 +111,7 @@ const formations = [
     ]),
     summary: "Pour transformer un projet professionnel déjà identifié en plan d'action concret et réaliste.",
     image_emoji: "🚀",
+    prix_ht: 1200,
   },
   {
     category: "bilan-de-competences",
@@ -135,6 +137,7 @@ const formations = [
     ]),
     summary: "Une approche innovante du bilan, fondée sur l'action et l'expérimentation plutôt que sur la planification.",
     image_emoji: "🧩",
+    prix_ht: null,
   },
   {
     category: "bilan-de-competences",
@@ -157,6 +160,7 @@ const formations = [
     ]),
     summary: "La formule la plus complète pour un accompagnement en profondeur, du diagnostic au suivi post-bilan.",
     image_emoji: "🎯",
+    prix_ht: null,
   },
   {
     category: "vae",
@@ -179,6 +183,7 @@ const formations = [
     ]),
     summary: "Faites reconnaître votre expérience professionnelle par une certification officielle.",
     image_emoji: "🏅",
+    prix_ht: null,
   },
   {
     category: "management-communication",
@@ -201,6 +206,7 @@ const formations = [
     ]),
     summary: "Développez une posture managériale qui fait grandir vos équipes au lieu de simplement les diriger.",
     image_emoji: "🧑‍🏫",
+    prix_ht: null,
   },
   {
     category: "management-communication",
@@ -222,6 +228,7 @@ const formations = [
     ]),
     summary: "Une journée pour découvrir les bases du management par le coaching, à distance.",
     image_emoji: "💡",
+    prix_ht: null,
   },
   {
     category: "management-communication",
@@ -243,6 +250,7 @@ const formations = [
     ]),
     summary: "Explorez le récit de vie comme levier de développement personnel et professionnel.",
     image_emoji: "📖",
+    prix_ht: null,
   },
   {
     category: "management-communication",
@@ -265,6 +273,7 @@ const formations = [
     ]),
     summary: "Une journée pour ancrer une pratique managériale plus responsable et durable.",
     image_emoji: "🌱",
+    prix_ht: null,
   },
   {
     category: "management-communication",
@@ -287,6 +296,7 @@ const formations = [
     ]),
     summary: "Renforcez votre impact managérial grâce à une communication plus claire et plus efficace.",
     image_emoji: "🗣️",
+    prix_ht: null,
   }
 ];
 
@@ -299,11 +309,11 @@ const insertFormation = db.prepare(`
   INSERT INTO formations
     (category_id, slug, title, format, duration_hours, duration_days, certifiante,
      cpf_eligible, lieu, accessible, public_vise, prerequis, objectifs, programme, summary,
-     image_emoji)
+     image_emoji, prix_ht)
   VALUES
     (@category_id, @slug, @title, @format, @duration_hours, @duration_days, @certifiante,
      @cpf_eligible, @lieu, 1, @public_vise, @prerequis, @objectifs, @programme, @summary,
-     @image_emoji)
+     @image_emoji, @prix_ht)
   ON CONFLICT(slug) DO UPDATE SET
     category_id = excluded.category_id,
     title = excluded.title,
@@ -318,7 +328,8 @@ const insertFormation = db.prepare(`
     objectifs = excluded.objectifs,
     programme = excluded.programme,
     summary = excluded.summary,
-    image_emoji = excluded.image_emoji
+    image_emoji = excluded.image_emoji,
+    prix_ht = excluded.prix_ht
 `);
 
 function seed() {

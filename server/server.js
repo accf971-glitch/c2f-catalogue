@@ -3,7 +3,7 @@ require("dotenv").config();
 const path = require("path");
 const express = require("express");
 const db = require("./db");
-const { sendContactNotification } = require("./mailer");
+const { sendContactNotification, sendDevisNotification } = require("./mailer");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,6 +26,7 @@ app.get("/api/formations", (req, res) => {
   let sql = `
     SELECT f.id, f.slug, f.title, f.format, f.duration_hours, f.duration_days,
            f.certifiante, f.cpf_eligible, f.lieu, f.accessible, f.summary, f.image_emoji,
+           f.prix_ht,
            c.slug AS category_slug, c.name AS category_name,
            (SELECT ROUND(AVG(r.note) * 20) FROM ratings r WHERE r.formation_id = f.id) AS satisfaction_rate,
            (SELECT COUNT(*) FROM ratings r WHERE r.formation_id = f.id) AS avis_count
@@ -118,6 +119,14 @@ app.post("/api/formations/:id/avis", (req, res) => {
 
 app.post("/api/contact", async (req, res) => {
   const { formation_id, nom, email, telephone, message } = req.body || {};
+  const type = req.body?.type === "devis" ? "devis" : "info";
+  const societe = req.body?.societe ? String(req.body.societe).slice(0, 200) : null;
+
+  let participants = null;
+  if (type === "devis") {
+    participants = Number(req.body?.participants) || 1;
+    if (participants < 1) participants = 1;
+  }
 
   if (!nom || !email) {
     return res.status(400).json({ error: "Le nom et l'email sont requis." });
@@ -125,25 +134,38 @@ app.post("/api/contact", async (req, res) => {
 
   const info = db
     .prepare(
-      `INSERT INTO contacts (formation_id, nom, email, telephone, message)
-       VALUES (?, ?, ?, ?, ?)`
+      `INSERT INTO contacts (formation_id, type, nom, email, telephone, societe, participants, message)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
     )
-    .run(formation_id || null, nom, email, telephone || null, message || null);
+    .run(formation_id || null, type, nom, email, telephone || null, societe, participants, message || null);
 
   res.status(201).json({ id: info.lastInsertRowid });
 
   const formation = formation_id
-    ? db.prepare("SELECT title FROM formations WHERE id = ?").get(formation_id)
+    ? db.prepare("SELECT title, prix_ht FROM formations WHERE id = ?").get(formation_id)
     : null;
 
   try {
-    await sendContactNotification({
-      nom,
-      email,
-      telephone,
-      message,
-      formationTitle: formation ? formation.title : null
-    });
+    if (type === "devis") {
+      await sendDevisNotification({
+        nom,
+        email,
+        telephone,
+        societe,
+        participants,
+        message,
+        formationTitle: formation ? formation.title : null,
+        prixHt: formation ? formation.prix_ht : null
+      });
+    } else {
+      await sendContactNotification({
+        nom,
+        email,
+        telephone,
+        message,
+        formationTitle: formation ? formation.title : null
+      });
+    }
   } catch (err) {
     console.error("Échec de l'envoi de l'email de notification :", err.message);
   }

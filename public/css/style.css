@@ -283,6 +283,17 @@ img {
   flex: 1;
 }
 
+.formation-card p.price,
+.sidebar-card .info-row.price span:last-child {
+  font-weight: 700;
+  color: var(--accent-dark);
+}
+
+.formation-card p.price {
+  margin: 0;
+  font-size: 15px;
+}
+
 .badge-row {
   display: flex;
   flex-wrap: wrap;

@@ -96,6 +96,43 @@
     </div>
   </div>
 
+  <div class="modal-overlay hidden" id="devisModal">
+    <div class="modal-box">
+      <button class="modal-close" id="closeDevisModal" aria-label="Fermer">&times;</button>
+      <h3>Demande de devis</h3>
+      <p id="devisFormationTitle" style="color:#5c6b70; font-size:14px;"></p>
+      <form id="devisForm">
+        <div class="form-field">
+          <label for="devisNom">Nom complet *</label>
+          <input type="text" id="devisNom" name="nom" required />
+        </div>
+        <div class="form-field">
+          <label for="devisEmail">Email *</label>
+          <input type="email" id="devisEmail" name="email" required />
+        </div>
+        <div class="form-field">
+          <label for="devisTelephone">Téléphone</label>
+          <input type="tel" id="devisTelephone" name="telephone" />
+        </div>
+        <div class="form-field">
+          <label for="devisSociete">Société (optionnel)</label>
+          <input type="text" id="devisSociete" name="societe" />
+        </div>
+        <div class="form-field">
+          <label for="devisParticipants">Nombre de participants</label>
+          <input type="number" id="devisParticipants" name="participants" min="1" value="1" />
+        </div>
+        <div class="form-field">
+          <label for="devisMessage">Message (optionnel)</label>
+          <textarea id="devisMessage" name="message" placeholder="Précisions utiles pour votre devis..."></textarea>
+        </div>
+        <p id="devisEstimation" style="font-weight:600; color:var(--accent-dark);"></p>
+        <button type="submit" class="cta-button">Demander mon devis</button>
+        <div class="form-status" id="devisStatus"></div>
+      </form>
+    </div>
+  </div>
+
   <script src="js/formation.js"></script>
 </body>
 </html>
