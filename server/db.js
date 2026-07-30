@@ -36,9 +36,18 @@ db.exec(`
     programme       TEXT,
     summary         TEXT,
     image_emoji     TEXT DEFAULT '📘',
+    satisfaction_rate INTEGER,
     created_at      TEXT NOT NULL DEFAULT (datetime('now'))
   );
 
+`);
+
+const formationColumns = db.prepare("PRAGMA table_info(formations)").all();
+if (!formationColumns.some((col) => col.name === "satisfaction_rate")) {
+  db.exec("ALTER TABLE formations ADD COLUMN satisfaction_rate INTEGER");
+}
+
+db.exec(`
   CREATE TABLE IF NOT EXISTS contacts (
     id           INTEGER PRIMARY KEY AUTOINCREMENT,
     formation_id INTEGER REFERENCES formations(id) ON DELETE SET NULL,

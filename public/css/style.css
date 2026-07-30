@@ -436,6 +436,11 @@ img {
   color: var(--text-muted);
 }
 
+.sidebar-card .info-row.satisfaction span:last-child {
+  color: var(--accent-dark);
+  font-weight: 700;
+}
+
 .cta-button {
   margin-top: 18px;
   width: 100%;

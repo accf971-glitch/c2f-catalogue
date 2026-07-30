@@ -75,6 +75,11 @@ function render(f) {
       <div class="info-row"><span>Lieu</span><span>${escapeHtml(f.lieu || "-")}</span></div>
       <div class="info-row"><span>Certifiante</span><span>${f.certifiante ? "Oui" : "Non"}</span></div>
       <div class="info-row"><span>Éligible CPF</span><span>${f.cpf_eligible ? "Oui" : "Non"}</span></div>
+      ${
+        f.satisfaction_rate != null
+          ? `<div class="info-row satisfaction"><span>Taux de satisfaction</span><span>⭐ ${f.satisfaction_rate}%</span></div>`
+          : ""
+      }
       <button class="cta-button" id="openContact">Demander des informations</button>
     </aside>
   `;

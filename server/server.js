@@ -26,6 +26,7 @@ app.get("/api/formations", (req, res) => {
   let sql = `
     SELECT f.id, f.slug, f.title, f.format, f.duration_hours, f.duration_days,
            f.certifiante, f.cpf_eligible, f.lieu, f.accessible, f.summary, f.image_emoji,
+           f.satisfaction_rate,
            c.slug AS category_slug, c.name AS category_name
     FROM formations f
     JOIN categories c ON c.id = f.category_id

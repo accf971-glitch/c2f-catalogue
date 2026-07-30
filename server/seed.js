@@ -23,7 +23,8 @@ const formations = [
     objectifs: "Analyser ses compétences professionnelles et personnelles, ses aptitudes et motivations ; définir un projet professionnel et, le cas échéant, un projet de formation.",
     programme: "Phase préliminaire (analyse de la demande) ; Phase d'investigation (compétences, intérêts, valeurs) ; Phase de conclusion (synthèse et plan d'action).",
     summary: "L'accompagnement de référence pour faire le point sur votre parcours et construire un projet professionnel solide.",
-    image_emoji: "🧭"
+    image_emoji: "🧭",
+    satisfaction_rate: 94
   },
   {
     category: "bilan-de-competences",
@@ -40,7 +41,8 @@ const formations = [
     objectifs: "Passer du projet à sa mise en œuvre concrète : plan d'action détaillé, étapes, ressources et échéances.",
     programme: "Validation du projet ; Étude de faisabilité ; Construction du plan d'action opérationnel ; Suivi de la mise en œuvre.",
     summary: "Pour transformer un projet professionnel déjà identifié en plan d'action concret et réaliste.",
-    image_emoji: "🚀"
+    image_emoji: "🚀",
+    satisfaction_rate: 92
   },
   {
     category: "bilan-de-competences",
@@ -57,7 +59,8 @@ const formations = [
     objectifs: "Utiliser l'approche par l'effectuation pour construire son projet à partir de ses ressources actuelles et avancer par petits pas testés.",
     programme: "Identification des ressources (qui je suis, ce que je sais, qui je connais) ; Construction itérative du projet ; Expérimentations terrain.",
     summary: "Une approche innovante du bilan, fondée sur l'action et l'expérimentation plutôt que sur la planification.",
-    image_emoji: "🧩"
+    image_emoji: "🧩",
+    satisfaction_rate: 89
   },
   {
     category: "bilan-de-competences",
@@ -74,7 +77,8 @@ const formations = [
     objectifs: "Couvrir l'ensemble des dimensions du bilan : compétences, personnalité, motivations, marché de l'emploi et plan d'action.",
     programme: "Diagnostic complet ; Exploration des pistes professionnelles ; Étude de marché ; Plan d'action final et suivi à 6 mois.",
     summary: "La formule la plus complète pour un accompagnement en profondeur, du diagnostic au suivi post-bilan.",
-    image_emoji: "🎯"
+    image_emoji: "🎯",
+    satisfaction_rate: 96
   },
   {
     category: "vae",
@@ -91,7 +95,8 @@ const formations = [
     objectifs: "Faire valider son expérience par un diplôme, titre ou certification professionnelle sans reprendre un cursus de formation complet.",
     programme: "Recevabilité du dossier ; Rédaction du dossier de VAE ; Préparation à l'entretien avec le jury ; Accompagnement post-jury.",
     summary: "Faites reconnaître votre expérience professionnelle par une certification officielle.",
-    image_emoji: "🏅"
+    image_emoji: "🏅",
+    satisfaction_rate: 91
   },
   {
     category: "management-communication",
@@ -108,7 +113,8 @@ const formations = [
     objectifs: "Adopter une posture managériale de type coach : écoute active, questionnement, délégation et accompagnement du développement des équipes.",
     programme: "Fondamentaux de la posture de coach ; Techniques d'écoute active et de questionnement ; Entretiens de développement ; Mises en situation.",
     summary: "Développez une posture managériale qui fait grandir vos équipes au lieu de simplement les diriger.",
-    image_emoji: "🧑‍🏫"
+    image_emoji: "🧑‍🏫",
+    satisfaction_rate: 95
   },
   {
     category: "management-communication",
@@ -125,7 +131,8 @@ const formations = [
     objectifs: "Découvrir les principes clés de la posture de manager coach et évaluer l'intérêt d'un accompagnement complet.",
     programme: "Introduction à la posture de coach ; Autodiagnostic de son style managérial ; Premiers outils applicables immédiatement.",
     summary: "Une journée pour découvrir les bases du management par le coaching, à distance.",
-    image_emoji: "💡"
+    image_emoji: "💡",
+    satisfaction_rate: 88
   },
   {
     category: "management-communication",
@@ -142,7 +149,8 @@ const formations = [
     objectifs: "Utiliser le récit de vie comme outil de construction identitaire et professionnelle, pour soi et pour accompagner autrui.",
     programme: "Théories de l'histoire de vie ; Techniques de récit biographique ; Animation d'ateliers de récit de vie.",
     summary: "Explorez le récit de vie comme levier de développement personnel et professionnel.",
-    image_emoji: "📖"
+    image_emoji: "📖",
+    satisfaction_rate: 90
   },
   {
     category: "management-communication",
@@ -159,7 +167,8 @@ const formations = [
     objectifs: "Intégrer les enjeux RSE et de qualité de vie au travail dans ses pratiques managériales quotidiennes.",
     programme: "Enjeux du management responsable ; Qualité de vie au travail ; Management inclusif ; Plan d'action individuel.",
     summary: "Une journée pour ancrer une pratique managériale plus responsable et durable.",
-    image_emoji: "🌱"
+    image_emoji: "🌱",
+    satisfaction_rate: 93
   },
   {
     category: "management-communication",
@@ -176,7 +185,8 @@ const formations = [
     objectifs: "Maîtriser les techniques de communication managériale : feedback, gestion des tensions, communication en réunion.",
     programme: "Communication verbale et non-verbale ; Feedback constructif ; Gestion des situations difficiles ; Communication en réunion.",
     summary: "Renforcez votre impact managérial grâce à une communication plus claire et plus efficace.",
-    image_emoji: "🗣️"
+    image_emoji: "🗣️",
+    satisfaction_rate: 97
   }
 ];
 
@@ -186,12 +196,30 @@ const insertCategory = db.prepare(
 const getCategoryId = db.prepare("SELECT id FROM categories WHERE slug = ?");
 
 const insertFormation = db.prepare(`
-  INSERT OR IGNORE INTO formations
+  INSERT INTO formations
     (category_id, slug, title, format, duration_hours, duration_days, certifiante,
-     cpf_eligible, lieu, accessible, public_vise, prerequis, objectifs, programme, summary, image_emoji)
+     cpf_eligible, lieu, accessible, public_vise, prerequis, objectifs, programme, summary,
+     image_emoji, satisfaction_rate)
   VALUES
     (@category_id, @slug, @title, @format, @duration_hours, @duration_days, @certifiante,
-     @cpf_eligible, @lieu, 1, @public_vise, @prerequis, @objectifs, @programme, @summary, @image_emoji)
+     @cpf_eligible, @lieu, 1, @public_vise, @prerequis, @objectifs, @programme, @summary,
+     @image_emoji, @satisfaction_rate)
+  ON CONFLICT(slug) DO UPDATE SET
+    category_id = excluded.category_id,
+    title = excluded.title,
+    format = excluded.format,
+    duration_hours = excluded.duration_hours,
+    duration_days = excluded.duration_days,
+    certifiante = excluded.certifiante,
+    cpf_eligible = excluded.cpf_eligible,
+    lieu = excluded.lieu,
+    public_vise = excluded.public_vise,
+    prerequis = excluded.prerequis,
+    objectifs = excluded.objectifs,
+    programme = excluded.programme,
+    summary = excluded.summary,
+    image_emoji = excluded.image_emoji,
+    satisfaction_rate = excluded.satisfaction_rate
 `);
 
 function seed() {
