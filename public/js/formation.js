@@ -74,7 +74,7 @@ function render(f) {
       ${section("Public visé", f.public_vise)}
       ${section("Prérequis", f.prerequis)}
       ${section("Objectifs", f.objectifs)}
-      ${section("Programme", f.programme)}
+      ${renderProgramme(f.programme)}
     </div>
 
     <aside class="sidebar-card">
@@ -106,6 +106,55 @@ function section(title, content) {
     <div class="detail-section">
       <h2>${title}</h2>
       <p>${escapeHtml(content)}</p>
+    </div>
+  `;
+}
+
+function renderProgramme(programmeJson) {
+  let phases;
+  try {
+    phases = JSON.parse(programmeJson);
+  } catch {
+    return "";
+  }
+  if (!Array.isArray(phases) || phases.length === 0) return "";
+
+  const phasesHtml = phases
+    .map((p) => {
+      const hasItems = Array.isArray(p.items) && p.items.length > 0;
+      const durationText = p.duration ? ` - ${escapeHtml(p.duration)}` : "";
+      const suffix = hasItems ? " - qui comprend :" : "";
+
+      const itemsHtml = hasItems
+        ? p.items
+            .map((it) => {
+              if (Array.isArray(it.details) && it.details.length > 0) {
+                return `
+                  <details class="programme-item">
+                    <summary>${escapeHtml(it.title)}</summary>
+                    <ul>${it.details.map((d) => `<li>${escapeHtml(d)}</li>`).join("")}</ul>
+                  </details>
+                `;
+              }
+              return `<div class="programme-item programme-item-flat">${escapeHtml(it.title)}</div>`;
+            })
+            .join("")
+        : "";
+
+      return `
+        <div class="programme-phase-banner">
+          <span class="check">✅</span>
+          <span>${escapeHtml(p.title)}${durationText}${suffix}</span>
+        </div>
+        ${itemsHtml}
+      `;
+    })
+    .join("");
+
+  return `
+    <div class="detail-section">
+      <h2>📖 Contenu de la formation</h2>
+      ${phasesHtml}
     </div>
   `;
 }
