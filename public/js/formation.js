@@ -17,7 +17,15 @@ const contactForm = document.getElementById("contactForm");
 const formStatus = document.getElementById("formStatus");
 const modalFormationTitle = document.getElementById("modalFormationTitle");
 
+const avisModal = document.getElementById("avisModal");
+const closeAvisModalBtn = document.getElementById("closeAvisModal");
+const avisForm = document.getElementById("avisForm");
+const avisStatus = document.getElementById("avisStatus");
+const avisFormationTitle = document.getElementById("avisFormationTitle");
+const starRating = document.getElementById("starRating");
+
 let currentFormation = null;
+let selectedNote = 0;
 
 function escapeHtml(str) {
   const div = document.createElement("div");
@@ -75,16 +83,21 @@ function render(f) {
       <div class="info-row"><span>Lieu</span><span>${escapeHtml(f.lieu || "-")}</span></div>
       <div class="info-row"><span>Certifiante</span><span>${f.certifiante ? "Oui" : "Non"}</span></div>
       <div class="info-row"><span>Éligible CPF</span><span>${f.cpf_eligible ? "Oui" : "Non"}</span></div>
-      ${
-        f.satisfaction_rate != null
-          ? `<div class="info-row satisfaction"><span>Taux de satisfaction</span><span>⭐ ${f.satisfaction_rate}%</span></div>`
-          : ""
-      }
+      <div class="info-row satisfaction">
+        <span>Taux de satisfaction</span>
+        <span>${
+          f.avis_count > 0
+            ? `⭐ ${f.satisfaction_rate}% (${f.avis_count} avis)`
+            : "Pas encore d'avis"
+        }</span>
+      </div>
       <button class="cta-button" id="openContact">Demander des informations</button>
+      <button class="review-button" id="openAvis">Donner mon avis</button>
     </aside>
   `;
 
   document.getElementById("openContact").addEventListener("click", openModal);
+  document.getElementById("openAvis").addEventListener("click", openAvisModal);
 }
 
 function section(title, content) {
@@ -144,6 +157,74 @@ contactForm.addEventListener("submit", async (e) => {
     console.error(err);
     formStatus.textContent = "Une erreur est survenue. Merci de réessayer ou de nous contacter directement.";
     formStatus.className = "form-status error";
+  }
+});
+
+function openAvisModal() {
+  avisFormationTitle.textContent = currentFormation ? currentFormation.title : "";
+  avisStatus.textContent = "";
+  avisStatus.className = "form-status";
+  avisForm.reset();
+  setSelectedNote(0);
+  avisModal.classList.remove("hidden");
+}
+
+function closeAvisModal() {
+  avisModal.classList.add("hidden");
+}
+
+function setSelectedNote(note) {
+  selectedNote = note;
+  [...starRating.querySelectorAll(".star")].forEach((star) => {
+    star.classList.toggle("filled", Number(star.dataset.value) <= note);
+  });
+}
+
+starRating.querySelectorAll(".star").forEach((star) => {
+  star.addEventListener("click", () => setSelectedNote(Number(star.dataset.value)));
+});
+
+closeAvisModalBtn.addEventListener("click", closeAvisModal);
+avisModal.addEventListener("click", (e) => {
+  if (e.target === avisModal) closeAvisModal();
+});
+
+avisForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  if (!selectedNote) {
+    avisStatus.textContent = "Merci de sélectionner une note (1 à 5 étoiles).";
+    avisStatus.className = "form-status error";
+    return;
+  }
+
+  avisStatus.textContent = "Envoi en cours...";
+  avisStatus.className = "form-status";
+
+  try {
+    const res = await fetch(`/api/formations/${currentFormation.id}/avis`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        note: selectedNote,
+        commentaire: document.getElementById("commentaire").value.trim()
+      })
+    });
+
+    if (!res.ok) throw new Error("Erreur lors de l'envoi");
+
+    const updated = await res.json();
+    currentFormation.satisfaction_rate = updated.satisfaction_rate;
+    currentFormation.avis_count = updated.avis_count;
+    render(currentFormation);
+
+    avisStatus.textContent = "Merci pour votre avis !";
+    avisStatus.className = "form-status success";
+    setTimeout(closeAvisModal, 1200);
+  } catch (err) {
+    console.error(err);
+    avisStatus.textContent = "Une erreur est survenue. Merci de réessayer.";
+    avisStatus.className = "form-status error";
   }
 });
 

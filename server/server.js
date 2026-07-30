@@ -26,8 +26,9 @@ app.get("/api/formations", (req, res) => {
   let sql = `
     SELECT f.id, f.slug, f.title, f.format, f.duration_hours, f.duration_days,
            f.certifiante, f.cpf_eligible, f.lieu, f.accessible, f.summary, f.image_emoji,
-           f.satisfaction_rate,
-           c.slug AS category_slug, c.name AS category_name
+           c.slug AS category_slug, c.name AS category_name,
+           (SELECT ROUND(AVG(r.note) * 20) FROM ratings r WHERE r.formation_id = f.id) AS satisfaction_rate,
+           (SELECT COUNT(*) FROM ratings r WHERE r.formation_id = f.id) AS avis_count
     FROM formations f
     JOIN categories c ON c.id = f.category_id
     WHERE 1 = 1
@@ -68,7 +69,9 @@ app.get("/api/formations", (req, res) => {
 app.get("/api/formations/:id", (req, res) => {
   const row = db
     .prepare(
-      `SELECT f.*, c.slug AS category_slug, c.name AS category_name
+      `SELECT f.*, c.slug AS category_slug, c.name AS category_name,
+              (SELECT ROUND(AVG(r.note) * 20) FROM ratings r WHERE r.formation_id = f.id) AS satisfaction_rate,
+              (SELECT COUNT(*) FROM ratings r WHERE r.formation_id = f.id) AS avis_count
        FROM formations f
        JOIN categories c ON c.id = f.category_id
        WHERE f.id = ? OR f.slug = ?`
@@ -77,6 +80,38 @@ app.get("/api/formations/:id", (req, res) => {
 
   if (!row) return res.status(404).json({ error: "Formation introuvable" });
   res.json(row);
+});
+
+// ---- Avis / notes ----
+
+app.post("/api/formations/:id/avis", (req, res) => {
+  const formation = db
+    .prepare("SELECT id FROM formations WHERE id = ? OR slug = ?")
+    .get(req.params.id, req.params.id);
+
+  if (!formation) return res.status(404).json({ error: "Formation introuvable" });
+
+  const note = Number(req.body?.note);
+  if (!Number.isInteger(note) || note < 1 || note > 5) {
+    return res.status(400).json({ error: "La note doit être un entier entre 1 et 5." });
+  }
+
+  const commentaire = req.body?.commentaire ? String(req.body.commentaire).slice(0, 2000) : null;
+
+  db.prepare("INSERT INTO ratings (formation_id, note, commentaire) VALUES (?, ?, ?)").run(
+    formation.id,
+    note,
+    commentaire
+  );
+
+  const { satisfaction_rate, avis_count } = db
+    .prepare(
+      `SELECT ROUND(AVG(note) * 20) AS satisfaction_rate, COUNT(*) AS avis_count
+       FROM ratings WHERE formation_id = ?`
+    )
+    .get(formation.id);
+
+  res.status(201).json({ satisfaction_rate, avis_count });
 });
 
 // ---- Contact / demande de devis ----

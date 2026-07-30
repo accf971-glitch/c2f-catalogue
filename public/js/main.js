@@ -129,6 +129,7 @@ function renderGrid(formations) {
         <span class="badge">${duration}</span>
         ${f.certifiante ? '<span class="badge success">Certifiante</span>' : ""}
         ${f.cpf_eligible ? '<span class="badge accent">Éligible CPF</span>' : ""}
+        ${f.avis_count > 0 ? `<span class="badge accent">⭐ ${f.satisfaction_rate}%</span>` : ""}
       </div>
     `;
 

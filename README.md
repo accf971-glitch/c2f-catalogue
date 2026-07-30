@@ -60,6 +60,7 @@ version pour éviter d'éditer le code directement.
 | GET     | `/api/formations`       | Liste des formations, filtrable via query params : `category`, `format`, `certifiante` (0/1), `cpf` (0/1), `lieu`, `q` (recherche texte) |
 | GET     | `/api/formations/:id`   | Détail d'une formation (par id ou par slug)                |
 | POST    | `/api/contact`          | Enregistre une demande d'information (`formation_id`, `nom`, `email`, `telephone`, `message`) et déclenche l'envoi d'email |
+| POST    | `/api/formations/:id/avis` | Enregistre un avis (`note` de 1 à 5, `commentaire` optionnel) ; le taux de satisfaction affiché sur chaque formation est calculé automatiquement à partir de la moyenne des avis reçus (`note` moyenne × 20, arrondi) |
 
 ## Configuration email
 
@@ -101,8 +102,12 @@ accessible sur une adresse du type `https://c2f-catalogue.onrender.com`.
 **Limite de l'offre gratuite Render à connaître** : l'instance se met en veille après 15 minutes
 sans visite (le premier chargement après une veille prend ~30-50 secondes), et le disque n'est
 pas garanti persistant d'un déploiement à l'autre — en cas de nouveau déploiement, la base de
-données peut repartir du jeu de données initial (`npm run seed`). Ce n'est pas bloquant : chaque
-demande de contact est de toute façon envoyée par email en plus d'être stockée en base.
+données peut repartir du jeu de données initial (`npm run seed`). Ce n'est pas bloquant pour les
+demandes de contact (envoyées par email en plus d'être stockées en base), **mais les avis
+laissés par les visiteurs, eux, n'existent qu'en base** : un redéploiement après que des vrais
+avis ont été postés les effacerait. Tant que le volume d'avis reste faible, éviter de redéployer
+inutilement une fois le site utilisé en production ; si les avis deviennent importants, il
+faudra passer à un disque persistant Render (payant) ou à une base hébergée externe.
 
 ## Prochaines étapes possibles
 
