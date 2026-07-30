@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catalogue de Formations - C2F</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-top">
+      <div class="logo">
+        <span class="mark">C2F</span>
+        <span class="tagline">Se former pour se transformer</span>
+      </div>
+      <div class="header-contact">
+        <div><a href="mailto:carinefontenelle@c2f-antilles.com">carinefontenelle@c2f-antilles.com</a></div>
+        <div>0690 76 61 88</div>
+      </div>
+    </div>
+    <nav class="category-nav" id="categoryNav">
+      <button class="active" data-slug="">Toutes les formations</button>
+    </nav>
+  </header>
+
+  <div class="search-bar">
+    <input type="search" id="searchInput" placeholder="Rechercher une formation (ex : management, bilan, VAE...)" />
+  </div>
+
+  <main class="main-layout">
+    <aside class="filters">
+      <h3>Filtres</h3>
+
+      <fieldset class="filter-group">
+        <legend>Type de formation</legend>
+        <select id="filterFormat">
+          <option value="">Tous les formats</option>
+          <option value="presentiel">Présentiel</option>
+          <option value="distanciel">Distanciel</option>
+          <option value="mixte">Mixte</option>
+          <option value="elearning">E-learning</option>
+          <option value="alternance">Alternance</option>
+          <option value="stage">Stage</option>
+        </select>
+      </fieldset>
+
+      <fieldset class="filter-group">
+        <legend>Certifiante</legend>
+        <label><input type="radio" name="certifiante" value="" checked /> Indifférent</label>
+        <label><input type="radio" name="certifiante" value="1" /> Oui</label>
+        <label><input type="radio" name="certifiante" value="0" /> Non</label>
+      </fieldset>
+
+      <fieldset class="filter-group">
+        <legend>Éligible CPF</legend>
+        <label><input type="radio" name="cpf" value="" checked /> Indifférent</label>
+        <label><input type="radio" name="cpf" value="1" /> Oui</label>
+        <label><input type="radio" name="cpf" value="0" /> Non</label>
+      </fieldset>
+
+      <fieldset class="filter-group">
+        <legend>Lieu</legend>
+        <select id="filterLieu">
+          <option value="">Tous les lieux</option>
+        </select>
+      </fieldset>
+
+      <button class="reset-filters" id="resetFilters">Réinitialiser les filtres</button>
+    </aside>
+
+    <section>
+      <div class="results-header">
+        <h2 id="resultsTitle">Toutes les formations</h2>
+        <span class="results-count" id="resultsCount"></span>
+      </div>
+
+      <div class="formation-grid" id="formationGrid">
+        <!-- cartes injectées par main.js -->
+      </div>
+
+      <div class="empty-state" id="emptyState" style="display:none">
+        <span class="emoji">🔍</span>
+        <p>Aucune formation ne correspond à votre recherche.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="tagline">SE FORMER POUR SE TRANSFORMER</div>
+        <div>C2F Antilles - Baie-Mahault, Guadeloupe</div>
+      </div>
+      <div>
+        <div>Carine Fontenelle</div>
+        <div><a href="mailto:carinefontenelle@c2f-antilles.com">carinefontenelle@c2f-antilles.com</a></div>
+        <div>0690 76 61 88</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
