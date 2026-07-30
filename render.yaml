@@ -8,7 +8,7 @@ services:
     startCommand: npm start
     envVars:
       - key: NODE_VERSION
-        value: 22.5.0
+        value: 24.18.1
       - key: GMAIL_USER
         sync: false
       - key: GMAIL_APP_PASSWORD

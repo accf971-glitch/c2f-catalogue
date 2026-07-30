@@ -33,8 +33,8 @@ c2f-catalogue/
 
 ## Installation et démarrage
 
-Prérequis : [Node.js](https://nodejs.org/) version 22.5 ou plus récente (testé avec la v24 LTS),
-car le module `node:sqlite` est utilisé.
+Prérequis : [Node.js](https://nodejs.org/) version 23.4 ou plus récente (testé avec la v24 LTS),
+car le module `node:sqlite` est utilisé sans flag expérimental à partir de cette version.
 
 ```bash
 cd server
