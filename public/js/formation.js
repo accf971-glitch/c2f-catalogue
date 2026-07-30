@@ -91,6 +91,7 @@ function render(f) {
       ${section("Prérequis", f.prerequis)}
       ${section("Objectifs", f.objectifs)}
       ${renderProgramme(f.programme)}
+      ${renderInfoCards()}
     </div>
 
     <aside class="sidebar-card">
@@ -174,6 +175,56 @@ function renderProgramme(programmeJson) {
     <div class="detail-section">
       <h2>📖 Contenu de la formation</h2>
       ${phasesHtml}
+    </div>
+  `;
+}
+
+function renderInfoCards() {
+  return `
+    <div class="detail-section">
+      <div class="info-card-grid">
+        <div class="info-card">
+          <div class="info-card-icon">🧑‍🏫</div>
+          <h3>Équipe pédagogique</h3>
+          <p><strong>Des experts engagés pour votre transformation</strong></p>
+          <p>L'équipe pédagogique de C2F est composée de formateurs-consultants expérimentés, coachs professionnels certifiés et accompagnants qualifiés, mobilisés autour d'une même mission : vous accompagner dans le développement de vos compétences, en respectant votre singularité, vos objectifs et votre rythme.</p>
+          <p>Chaque intervenant est sélectionné pour :</p>
+          <ul class="check-list">
+            <li>Son expertise métier confirmée</li>
+            <li>Sa capacité à transmettre avec clarté, méthode et pédagogie</li>
+            <li>Son engagement dans une posture d'écoute, d'accompagnement et de bienveillance</li>
+            <li>Sa maîtrise des outils pédagogiques innovants (formation à distance, classe inversée, pédagogie active, outils numériques)</li>
+          </ul>
+          <p>Notre équipe s'appuie sur des référentiels actualisés, des pratiques éprouvées, et un accompagnement humain sur mesure, en lien constant avec vos besoins et ceux du monde professionnel.</p>
+          <p>Au sein de C2F, vous n'êtes jamais seul : chaque formateur agit comme un véritable partenaire de votre montée en compétences et vous guide vers l'atteinte de vos objectifs avec exigence, clarté et enthousiasme.</p>
+          <p>🎯 Se former pour se transformer : notre engagement, c'est votre progression durable.</p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-icon">📋</div>
+          <h3>Suivi de l'exécution et évaluation des résultats</h3>
+          <ul>
+            <li>Contrat d'objectifs qui permet de vérifier que les objectifs individuels fixés en amont de la formation soient réalisés à la fin de la formation</li>
+            <li>Accompagnement individuel du bénéficiaire via la plateforme pédagogique</li>
+            <li>Feuille d'émargement qui permet de valider l'assiduité du bénéficiaire</li>
+            <li>Formulaire d'évaluation de la formation</li>
+            <li>Certificat de réalisation de l'action de formation</li>
+            <li>Questionnaires, tests, enquêtes métiers</li>
+          </ul>
+        </div>
+
+        <div class="info-card info-card-full">
+          <div class="info-card-icon">🛠️</div>
+          <h3>Ressources techniques et pédagogiques</h3>
+          <ul>
+            <li>Plateforme pédagogique et e-learning individuelle où le bénéficiaire pourra retrouver l'ensemble des livrables, tests, documents et commentaires de l'intervenant pour suivi de la progression dans le parcours de formation</li>
+            <li>Mise à disposition en ligne de documents supports de la formation</li>
+            <li>Tests spécialisés (psychométriques)</li>
+            <li>Outils de questionnements</li>
+            <li>Un livret d'accompagnement est complété à l'issue de chaque séance et rythme le déroulement du bilan de compétences</li>
+          </ul>
+        </div>
+      </div>
     </div>
   `;
 }

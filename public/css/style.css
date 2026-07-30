@@ -497,6 +497,81 @@ img {
   color: var(--text);
 }
 
+.info-card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 800px) {
+  .info-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.info-card {
+  border: 2px solid var(--accent);
+  border-radius: 16px;
+  padding: 28px 24px;
+  background: var(--card-bg);
+}
+
+.info-card-full {
+  grid-column: 1 / -1;
+}
+
+.info-card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin: 0 auto 14px;
+}
+
+.info-card h3 {
+  text-align: center;
+  color: var(--primary);
+  margin: 0 0 14px;
+  font-size: 17px;
+}
+
+.info-card p {
+  color: var(--text);
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+
+.info-card ul {
+  margin: 0 0 10px;
+  padding-left: 20px;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.info-card ul li {
+  margin-bottom: 8px;
+}
+
+.info-card ul.check-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.info-card ul.check-list li {
+  display: flex;
+  gap: 8px;
+}
+
+.info-card ul.check-list li::before {
+  content: "✔";
+  color: var(--accent-dark);
+  flex-shrink: 0;
+}
+
 .sidebar-card {
   background: var(--card-bg);
   border-radius: var(--radius);
