@@ -64,11 +64,10 @@ version pour éviter d'éditer le code directement.
 
 ## Prix des formations
 
-Le champ `prix_ht` (dans `server/seed.js`) est le prix HT en euros. **Seul le prix de
-"Bilan de Compétences - Réalisation" (1 200 € HT) est confirmé** (source : catalogue
-catalogueformpro.com d'origine). Les 9 autres formations ont `prix_ht: null`, ce qui affiche
-"Sur devis" sur le site plutôt qu'un chiffre inventé. Pour ajouter un vrai prix à une formation,
-éditer sa valeur `prix_ht` dans `server/seed.js` puis relancer `npm run seed`.
+Le champ `prix_ht` (dans `server/seed.js`) est le prix HT en euros, fourni par C2F. Seule la
+VAE est volontairement à `prix_ht: null` (affiché "Sur devis"), les 9 autres formations ont un
+prix fixe. Pour modifier un prix, éditer sa valeur `prix_ht` dans `server/seed.js` puis relancer
+`npm run seed`.
 
 ## Configuration email
 

@@ -49,7 +49,7 @@ const formations = [
     ]),
     summary: "L'accompagnement de référence pour faire le point sur votre parcours et construire un projet professionnel solide.",
     image_emoji: "🧭",
-    prix_ht: null,
+    prix_ht: 1500,
   },
   {
     category: "bilan-de-competences",
@@ -137,7 +137,7 @@ const formations = [
     ]),
     summary: "Une approche innovante du bilan, fondée sur l'action et l'expérimentation plutôt que sur la planification.",
     image_emoji: "🧩",
-    prix_ht: null,
+    prix_ht: 1700,
   },
   {
     category: "bilan-de-competences",
@@ -160,7 +160,7 @@ const formations = [
     ]),
     summary: "La formule la plus complète pour un accompagnement en profondeur, du diagnostic au suivi post-bilan.",
     image_emoji: "🎯",
-    prix_ht: null,
+    prix_ht: 2400,
   },
   {
     category: "vae",
@@ -206,7 +206,7 @@ const formations = [
     ]),
     summary: "Développez une posture managériale qui fait grandir vos équipes au lieu de simplement les diriger.",
     image_emoji: "🧑‍🏫",
-    prix_ht: null,
+    prix_ht: 1450,
   },
   {
     category: "management-communication",
@@ -228,7 +228,7 @@ const formations = [
     ]),
     summary: "Une journée pour découvrir les bases du management par le coaching, à distance.",
     image_emoji: "💡",
-    prix_ht: null,
+    prix_ht: 500,
   },
   {
     category: "management-communication",
@@ -250,7 +250,7 @@ const formations = [
     ]),
     summary: "Explorez le récit de vie comme levier de développement personnel et professionnel.",
     image_emoji: "📖",
-    prix_ht: null,
+    prix_ht: 2396.31,
   },
   {
     category: "management-communication",
@@ -273,7 +273,7 @@ const formations = [
     ]),
     summary: "Une journée pour ancrer une pratique managériale plus responsable et durable.",
     image_emoji: "🌱",
-    prix_ht: null,
+    prix_ht: 850,
   },
   {
     category: "management-communication",
@@ -296,7 +296,7 @@ const formations = [
     ]),
     summary: "Renforcez votre impact managérial grâce à une communication plus claire et plus efficace.",
     image_emoji: "🗣️",
-    prix_ht: null,
+    prix_ht: 950,
   }
 ];
 
