@@ -163,16 +163,42 @@ img {
   top: 20px;
 }
 
-.filters h3 {
+.filters summary {
   margin: 0 0 14px;
   font-size: 15px;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: var(--primary);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filters summary::-webkit-details-marker {
+  display: none;
+}
+
+.filters summary::after {
+  content: "⌄";
+  font-size: 18px;
+  color: var(--text-muted);
+  transition: transform 0.15s;
+  text-transform: none;
+}
+
+.filters[open] summary::after {
+  transform: rotate(180deg);
 }
 
 .filter-group {
   margin-bottom: 18px;
+}
+
+.filters summary ~ .filter-group:first-of-type {
+  margin-top: 4px;
 }
 
 .filter-group legend {
