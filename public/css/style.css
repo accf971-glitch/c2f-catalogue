@@ -58,10 +58,12 @@ img {
   flex-direction: column;
 }
 
-.logo .mark {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: 1px;
+.logo .logo-mark {
+  height: 64px;
+  width: 64px;
+  object-fit: cover;
+  border-radius: 50%;
+  background: #fff;
 }
 
 .logo .tagline {
