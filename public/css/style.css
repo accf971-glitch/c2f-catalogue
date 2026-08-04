@@ -727,26 +727,6 @@ img {
   color: #c0392b;
 }
 
-.star-rating {
-  display: flex;
-  gap: 4px;
-}
-
-.star-rating .star {
-  background: none;
-  border: none;
-  font-size: 32px;
-  line-height: 1;
-  cursor: pointer;
-  color: var(--border);
-  padding: 0;
-  transition: color 0.1s;
-}
-
-.star-rating .star.filled {
-  color: var(--accent);
-}
-
 .review-button {
   margin-top: 10px;
   width: 100%;

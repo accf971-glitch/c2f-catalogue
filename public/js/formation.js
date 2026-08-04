@@ -17,13 +17,6 @@ const contactForm = document.getElementById("contactForm");
 const formStatus = document.getElementById("formStatus");
 const modalFormationTitle = document.getElementById("modalFormationTitle");
 
-const avisModal = document.getElementById("avisModal");
-const closeAvisModalBtn = document.getElementById("closeAvisModal");
-const avisForm = document.getElementById("avisForm");
-const avisStatus = document.getElementById("avisStatus");
-const avisFormationTitle = document.getElementById("avisFormationTitle");
-const starRating = document.getElementById("starRating");
-
 const devisModal = document.getElementById("devisModal");
 const closeDevisModalBtn = document.getElementById("closeDevisModal");
 const devisForm = document.getElementById("devisForm");
@@ -33,7 +26,6 @@ const devisParticipantsInput = document.getElementById("devisParticipants");
 const devisEstimation = document.getElementById("devisEstimation");
 
 let currentFormation = null;
-let selectedNote = 0;
 
 function escapeHtml(str) {
   const div = document.createElement("div");
@@ -111,12 +103,10 @@ function render(f) {
       </div>
       <button class="cta-button" id="openContact">Demander des informations</button>
       <button class="review-button" id="openDevis">Demander un devis</button>
-      <button class="review-button" id="openAvis">Donner mon avis</button>
     </aside>
   `;
 
   document.getElementById("openContact").addEventListener("click", openModal);
-  document.getElementById("openAvis").addEventListener("click", openAvisModal);
   document.getElementById("openDevis").addEventListener("click", openDevisModal);
 }
 
@@ -276,74 +266,6 @@ contactForm.addEventListener("submit", async (e) => {
     console.error(err);
     formStatus.textContent = "Une erreur est survenue. Merci de réessayer ou de nous contacter directement.";
     formStatus.className = "form-status error";
-  }
-});
-
-function openAvisModal() {
-  avisFormationTitle.textContent = currentFormation ? currentFormation.title : "";
-  avisStatus.textContent = "";
-  avisStatus.className = "form-status";
-  avisForm.reset();
-  setSelectedNote(0);
-  avisModal.classList.remove("hidden");
-}
-
-function closeAvisModal() {
-  avisModal.classList.add("hidden");
-}
-
-function setSelectedNote(note) {
-  selectedNote = note;
-  [...starRating.querySelectorAll(".star")].forEach((star) => {
-    star.classList.toggle("filled", Number(star.dataset.value) <= note);
-  });
-}
-
-starRating.querySelectorAll(".star").forEach((star) => {
-  star.addEventListener("click", () => setSelectedNote(Number(star.dataset.value)));
-});
-
-closeAvisModalBtn.addEventListener("click", closeAvisModal);
-avisModal.addEventListener("click", (e) => {
-  if (e.target === avisModal) closeAvisModal();
-});
-
-avisForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  if (!selectedNote) {
-    avisStatus.textContent = "Merci de sélectionner une note (1 à 5 étoiles).";
-    avisStatus.className = "form-status error";
-    return;
-  }
-
-  avisStatus.textContent = "Envoi en cours...";
-  avisStatus.className = "form-status";
-
-  try {
-    const res = await fetch(`/api/formations/${currentFormation.id}/avis`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        note: selectedNote,
-        commentaire: document.getElementById("commentaire").value.trim()
-      })
-    });
-
-    if (!res.ok) throw new Error("Erreur lors de l'envoi");
-
-    const updated = await res.json();
-    currentFormation.satisfaction_rate = updated.satisfaction_rate;
-    currentFormation.avis_count = updated.avis_count;
-    render(currentFormation);
-
-    avisStatus.textContent = "Merci pour votre avis !";
-    avisStatus.className = "form-status success";
-    setTimeout(closeAvisModal, 1200);
-  } catch (err) {
-    console.error(err);
-    avisStatus.textContent = "Une erreur est survenue. Merci de réessayer.";
-    avisStatus.className = "form-status error";
   }
 });
 
